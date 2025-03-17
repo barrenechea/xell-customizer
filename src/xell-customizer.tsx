@@ -24,6 +24,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ContributorsScroller from "@/components/xell-contributors";
 import { cn } from "@/lib/utils";
 
 const today = new Date().toISOString().split("T")[0];
@@ -225,6 +226,9 @@ const XeLLCustomizer = () => {
             Customize the appearance of your XeLL console with colors and ASCII
             art
           </p>
+
+          {/* Contributors scroller */}
+          <ContributorsScroller />
         </div>
 
         {/* Preview Panel - Full width */}
