@@ -1,6 +1,7 @@
 import {
   Brush,
   Check,
+  Download,
   Layout,
   Monitor,
   Palette,
@@ -9,6 +10,7 @@ import {
 } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 
+import { GenerationDialog } from "@/components/generation-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -166,6 +168,7 @@ const XeLLCustomizer = () => {
   const [backgroundColor, setBackgroundColor] = useState("4E44D8");
   const [foregroundColor, setForegroundColor] = useState("FFFFFF");
   const [asciiArt, setAsciiArt] = useState(xellReloadedASCII);
+  const [isGenerationDialogOpen, setIsGenerationDialogOpen] = useState(false);
 
   const consoleText = `${outputHeader}${asciiArt}${outputFooter}`;
 
@@ -486,6 +489,16 @@ const XeLLCustomizer = () => {
                 />
               </TabsContent>
             </Tabs>
+            <div className="mt-6 flex justify-center">
+              <Button
+                onClick={() => setIsGenerationDialogOpen(true)}
+                className="gap-2"
+                size="lg"
+              >
+                <Download className="h-4 w-4" />
+                Generate Custom XeLL Build
+              </Button>
+            </div>
           </CardContent>
         </Card>
 
@@ -511,6 +524,15 @@ const XeLLCustomizer = () => {
           </div>
         </footer>
       </div>
+      <GenerationDialog
+        isOpen={isGenerationDialogOpen}
+        onOpenChange={setIsGenerationDialogOpen}
+        params={{
+          background_color: `0x${rgbToBgr(backgroundColor)}00`,
+          foreground_color: `0x${rgbToBgr(foregroundColor)}00`,
+          ascii_art: asciiArt !== xellReloadedASCII ? asciiArt : undefined,
+        }}
+      />
     </div>
   );
 };
