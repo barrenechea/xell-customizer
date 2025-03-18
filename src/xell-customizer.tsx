@@ -66,7 +66,7 @@ const free60ASCII = `
  #  ########  ########   ####   #####     #####      ##
  ######################################################`;
 
-const gitData = "v0.993-git-55b96e2";
+const gitData = "v0.993-git-531bccf";
 
 const outputHeader = `
  * Xenos FB with 148x41 (1280x720) at 0x9e000000 initialized.
@@ -78,7 +78,7 @@ Built with GCC 13.3.0 and Binutils 2.44
 
 const outputFooter = `
              Free60.org XeLL - Xenon Linux Loader ${gitData}
-                 Special Corona Compatible XeLL version
+    Special Corona & Winchester Compatible XeLL version
 
  * nand init
  * network init
