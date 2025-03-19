@@ -13,6 +13,7 @@ export interface GenerationResponse {
 export interface DownloadResponse {
   file: string;
   filename: string;
+  error?: string;
 }
 
 /**

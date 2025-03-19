@@ -100,7 +100,7 @@ export function GenerationDialog({
       const result = await startGeneration({
         background_color: params.background_color,
         foreground_color: params.foreground_color,
-        ascii_art: params.ascii_art,
+        ascii_art: params.ascii_art ? btoa(params.ascii_art) : undefined,
       });
 
       setGenerationId(result.id);
@@ -117,6 +117,13 @@ export function GenerationDialog({
 
     try {
       const result = await checkDownload(generationId);
+
+      if (result.error) {
+        setError(result.error);
+        setStatus("error");
+        return;
+      }
+
       if (result.file) {
         setFileData(result);
         setStatus("ready");

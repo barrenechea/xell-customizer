@@ -66,7 +66,7 @@ const free60ASCII = `
  #  ########  ########   ####   #####     #####      ##
  ######################################################`;
 
-const gitData = "v0.993-git-531bccf";
+const gitData = "v0.993-git-7526b02";
 
 const outputHeader = `
  * Xenos FB with 148x41 (1280x720) at 0x9e000000 initialized.
