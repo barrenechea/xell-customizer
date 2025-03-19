@@ -28,45 +28,10 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import ContributorsScroller from "@/components/xell-contributors";
+import { asciiPresets, defaultASCII } from "@/lib/ascii-presets";
 import { cn } from "@/lib/utils";
 
 const today = new Date().toISOString().split("T")[0];
-
-const xellReloadedASCII = `
-       ▄    ▄       ▄     ▄▄      ▄▄
-      ▐█▌  ▐█▌    ▄█▀█▄   ██      ██
-      ▐░▌  ▐░▌   ▐░▌ ▐░▌  ▌▐      ▌▐
-▄▄▄▄▄ ▐▒▌  ▐▒▌ ▄ ▒▒ ▄▄▄▄▄ ▒▒ ▄▄▄▄ ▒▒ ▄▄▄▄▄
-▓▓▓▓▓▄ ▐▓▌▐▓▌ ▄▓ ▓▓ ▀▀▓▓▓ ▓▓ ▓▓▓▓ ▓▓ ▓▓▓▓▓
-▓▓▓▓▓▓▄ ▀██▀ ▄▓▓ ██▀▀ ▓▓▓ ██ ▓▓▓▓ ██ ▓▓▓▓▓
-▀▀▀▀▀▀ ▄▒▀▀▒▄ ▀▀ ▒▒ ▀▀▀▀▀ ▒▒ ▀▀▀▀ ▒▒ ▀▀▀▀▀
-      ▐▓▌  ▐▓▌   ▐▓▌ █▓▌  ▓▓      ▓▓
-      ██    ██    ▀█▄█▀   ██      ██
-      ▀▀    ▀▀      ▀     ▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀
-   ▄▄▄         ▄     ▄▄         ▄▄        ▄      ▄▄▄        ▄      ▄▄▄
-  ██ ▀█▄     ▄█▀█▄   ██       ▄█▀▀█▄    ▄█▀█▄   ██ ▀█▄    ▄█▀█▄   ██ ▀█▄
-  ▌▐  ▐░▌   ▐░▌ ▐░▌  ▌▐      ▐░▌  ▐░▌  ▐░▌ ▐░▌  ▌▐  ▐░▌  ▐░▌ ▐░▌  ▌▐  ▐░▌
-▄ ▒▒ ▄ ▒▒ ▄ ▒▒ ▄▄▄▄▄ ▒▒ ▄▄▄▄ ▒▒ ▄▄ ▒▒▄ ▒▒ ▄ ▒▒▄ ▒▒ ▄ ▒▒▄ ▒▒ ▄▄▄▄▄ ▒▒ ▄ ▒▒
-▓ ▓▓ ▀█▓▌ ▓ ▓▓ ▀▀▓▓▓ ▓▓ ▓▓▓▓ ▓▓ ▓▓ ▓▓▓ ▓▓ ▀ ▓▓▓ ▓▓ ▓ ▓▓▓ ▓▓ ▀▀▓▓▓ ▓▓ ▓ ▓▓
-▓ ██▀█▀▀ ▄▓ ██▀▀ ▓▓▓ ██ ▓▓▓▓ ██ ▓▓ ██▓ ██▀▀▀██▓ ██ ▓ ██▓ ██▀▀ ▓▓▓ ██ ▓ ██
-▀ ▒▒ ▀▒▄ ▀▀ ▒▒ ▀▀▀▀▀ ▒▒ ▀▀▀▀ ▒▒ ▀▀ ▒▒▀ ▒▒ ▀ ▒▒▀ ▒▒ ▀ ▒▒▀ ▒▒ ▀▀▀▀▀ ▒▒ ▀ ▒▒
-  ▓▓  ▐▓▌   ▐▓▌ ▐▓▌  ▓▓      ▐▓▌  ▐▓▌  ▓▓   ▓▓  ▓▓  ▐▓▌  ▐▓▌ ▐▓▌  ▓▓  ▐▓▌
-  ██   ██    ▀█▄█▀   ██       ▀█▄▄█▀   ██   ██  ██ ▄█▀    ▀█▄█▀   ██ ▄█▀
-  ▀▀   ▀▀      ▀     ▀▀▀▀▀▀▀    ▀▀     ▀▀   ▀▀   ▀▀▀        ▀      ▀▀▀`;
-
-const free60ASCII = `
- ######################################################
- #        ##########################       ####      ##
- #  ###############################  #####  ##   ##   #
- #  ###############################  #########  ####  #
- #  ########  #   ####   ####   ###       ####  ####  #
- #      ####    #  ##  #  ##  #  ##   ###  ###  ####  #
- #  ########  #######     ##     ##  #####  ##  ####  #
- #  ########  #######  #####  #####  #####  ##  ####  #
- #  ########  #######  #  ##  #  ###  ###   ##   ##   #
- #  ########  ########   ####   #####     #####      ##
- ######################################################`;
-
 const gitData = "v0.993-git-7526b02";
 
 const outputHeader = `
@@ -160,15 +125,10 @@ const THEME_PRESETS = [
   },
 ];
 
-const ASCII_PRESETS = {
-  xellReloadedLogo: xellReloadedASCII,
-  free60Logo: free60ASCII,
-};
-
 const XeLLCustomizer = () => {
   const [backgroundColor, setBackgroundColor] = useState("4E44D8");
   const [foregroundColor, setForegroundColor] = useState("FFFFFF");
-  const [asciiArt, setAsciiArt] = useState(xellReloadedASCII);
+  const [asciiArt, setAsciiArt] = useState(defaultASCII);
   const [isGenerationDialogOpen, setIsGenerationDialogOpen] = useState(false);
 
   const consoleText = `${outputHeader}${asciiArt}${outputFooter}`;
@@ -470,23 +430,19 @@ const XeLLCustomizer = () => {
 
               {/* ASCII Art Tab */}
               <TabsContent value="ascii" className="space-y-6">
-                <div className="grid grid-cols-2 gap-4">
-                  <Button
-                    onClick={() => setAsciiArt(ASCII_PRESETS.xellReloadedLogo)}
-                    variant="outline"
-                    className="flex h-auto cursor-pointer items-center gap-2 py-2 transition-all hover:shadow-md"
-                  >
-                    <Brush className="h-4 w-4 text-blue-500" />
-                    XeLL Reloaded
-                  </Button>
-                  <Button
-                    onClick={() => setAsciiArt(ASCII_PRESETS.free60Logo)}
-                    variant="outline"
-                    className="flex h-auto cursor-pointer items-center gap-2 py-2 transition-all hover:shadow-md"
-                  >
-                    <Brush className="h-4 w-4 text-blue-500" />
-                    Free60
-                  </Button>
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
+                  {asciiPresets.map((preset) => (
+                    <Button
+                      key={preset.id}
+                      onClick={() => setAsciiArt(preset.value)}
+                      variant="outline"
+                      className="flex h-auto cursor-pointer items-center gap-2 py-2 transition-all hover:shadow-md"
+                      disabled={asciiArt === preset.value}
+                    >
+                      <Brush className="h-4 w-4 text-blue-500" />
+                      {preset.name}
+                    </Button>
+                  ))}
                 </div>
 
                 <Separator>Or create your own</Separator>
@@ -538,7 +494,7 @@ const XeLLCustomizer = () => {
         params={{
           background_color: `0x${rgbToBgr(backgroundColor)}00`,
           foreground_color: `0x${rgbToBgr(foregroundColor)}00`,
-          ascii_art: asciiArt !== xellReloadedASCII ? asciiArt : undefined,
+          ascii_art: asciiArt !== defaultASCII ? asciiArt : undefined,
         }}
       />
     </div>
