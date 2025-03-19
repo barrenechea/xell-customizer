@@ -19,6 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -354,6 +355,9 @@ const XeLLCustomizer = () => {
                     </Tooltip>
                   ))}
                 </div>
+
+                <Separator>Or choose your own</Separator>
+
                 <div className="flex flex-col items-center space-y-4">
                   <div className="relative">
                     <div
@@ -424,6 +428,9 @@ const XeLLCustomizer = () => {
                     </Tooltip>
                   ))}
                 </div>
+
+                <Separator>Or choose your own</Separator>
+
                 <div className="flex flex-col items-center space-y-4">
                   <div className="relative">
                     <div
@@ -481,6 +488,9 @@ const XeLLCustomizer = () => {
                     Free60
                   </Button>
                 </div>
+
+                <Separator>Or create your own</Separator>
+
                 <Textarea
                   value={asciiArt}
                   onChange={(e) => setAsciiArt(e.target.value)}
@@ -505,9 +515,8 @@ const XeLLCustomizer = () => {
         {/* Footer */}
         <footer className="mt-12 text-center">
           <div className="flex flex-col space-y-2">
-            <div className="inline-flex items-center justify-center">
-              <div className="h-px w-12 bg-slate-300 dark:bg-slate-700"></div>
-              <span className="mx-4 text-slate-500 dark:text-slate-400">
+            <Separator>
+              <span className="text-slate-500 dark:text-slate-400">
                 Created by{" "}
                 <a
                   href="https://github.com/barrenechea"
@@ -516,8 +525,7 @@ const XeLLCustomizer = () => {
                   barrenechea
                 </a>
               </span>
-              <div className="h-px w-12 bg-slate-300 dark:bg-slate-700"></div>
-            </div>
+            </Separator>
             <p className="text-xs text-slate-400 dark:text-slate-500">
               {new Date().getFullYear()} · XeLL Theme Customizer
             </p>
