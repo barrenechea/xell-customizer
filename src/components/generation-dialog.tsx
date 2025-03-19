@@ -1,3 +1,4 @@
+import { Buffer } from "buffer/";
 import { Download, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -100,7 +101,9 @@ export function GenerationDialog({
       const result = await startGeneration({
         background_color: params.background_color,
         foreground_color: params.foreground_color,
-        ascii_art: params.ascii_art ? window.btoa(params.ascii_art) : undefined,
+        ascii_art: params.ascii_art
+          ? Buffer.from(params.ascii_art).toString("base64")
+          : undefined,
       });
 
       setGenerationId(result.id);
