@@ -1,12 +1,14 @@
 const API_BASE_URL = "https://xell-api.barrenechea.cl";
 
 export interface GenerationParams {
+  /** LibXenon-formatted BGR color */
   background_color: string;
+  /** LibXenon-formatted BGR color */
   foreground_color: string;
   ascii_art?: string;
 }
 
-export interface GenerationResponse {
+interface GenerationResponse {
   id: string;
 }
 

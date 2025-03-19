@@ -22,13 +22,17 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import ContributorsScroller from "@/components/xell-contributors";
 import { asciiPresets, defaultASCII } from "@/lib/ascii-presets";
+import {
+  CONSOLE_COLORS,
+  type ConsoleColorName,
+  defaultTheme,
+  isColorDark,
+  rgbToLibXenon,
+  THEME_PRESETS,
+  type ThemePreset,
+} from "@/lib/theme-colors";
 import { cn } from "@/lib/utils";
 
 const today = new Date().toISOString().split("T")[0];
@@ -54,80 +58,13 @@ Waiting for link...link still down.
  * requesting dhcp.....................
 `;
 
-/** Check if a color is dark (to determine icon and border color) */
-const isColorDark = (hexColor: string) => {
-  const r = parseInt(hexColor.substring(0, 2), 16);
-  const g = parseInt(hexColor.substring(2, 4), 16);
-  const b = parseInt(hexColor.substring(4, 6), 16);
-  return r * 0.299 + g * 0.587 + b * 0.114 < 128;
-};
-
-/** Predefined console colors from LibXenon in BGR format */
-const CONSOLE_COLORS = {
-  CONSOLE_COLOR_RED: "0000FF",
-  CONSOLE_COLOR_BLUE: "D8444E",
-  CONSOLE_COLOR_GREEN: "008000",
-  CONSOLE_COLOR_BLACK: "000000",
-  CONSOLE_COLOR_WHITE: "FFFFFF",
-  CONSOLE_COLOR_GREY: "C0C0C0",
-  CONSOLE_COLOR_BROWN: "003399",
-  CONSOLE_COLOR_PURPLE: "FF0099",
-  CONSOLE_COLOR_YELLOW: "00FFFF",
-  CONSOLE_COLOR_ORANGE: "0066FF",
-  CONSOLE_COLOR_PINK: "FF66FF",
-};
-
-/** Convert BGR to RGB format */
-const bgrToRgb = (bgrHex: string) => {
-  const b = bgrHex.substring(0, 2);
-  const g = bgrHex.substring(2, 4);
-  const r = bgrHex.substring(4, 6);
-  return r + g + b;
-};
-
-/** Convert RGB to BGR format */
-const rgbToBgr = (rgbHex: string) => {
-  const r = rgbHex.substring(0, 2);
-  const g = rgbHex.substring(2, 4);
-  const b = rgbHex.substring(4, 6);
-  return b + g + r;
-};
-
-const THEME_PRESETS = [
-  {
-    id: "default",
-    name: "Default Theme",
-    description: "Classic XeLL blue background with white text",
-    backgroundColor: CONSOLE_COLORS.CONSOLE_COLOR_BLUE,
-    foregroundColor: CONSOLE_COLORS.CONSOLE_COLOR_WHITE,
-  },
-  {
-    id: "swizzy",
-    name: "Swizzy Theme",
-    description: "Black background with orange text - Swizzy's favorite!",
-    backgroundColor: CONSOLE_COLORS.CONSOLE_COLOR_BLACK,
-    foregroundColor: CONSOLE_COLORS.CONSOLE_COLOR_ORANGE,
-  },
-  {
-    id: "xtudo",
-    name: "XTUDO Theme",
-    description: "Black background with pink text - Niceshot's favorite!",
-    backgroundColor: CONSOLE_COLORS.CONSOLE_COLOR_BLACK,
-    foregroundColor: CONSOLE_COLORS.CONSOLE_COLOR_PINK,
-  },
-  {
-    id: "classic",
-    name: "Retro Theme",
-    description:
-      "Reminiscent of vintage green phosphor CRT terminals from the early computing era",
-    backgroundColor: CONSOLE_COLORS.CONSOLE_COLOR_BLACK,
-    foregroundColor: CONSOLE_COLORS.CONSOLE_COLOR_GREEN,
-  },
-];
-
 const XeLLCustomizer = () => {
-  const [backgroundColor, setBackgroundColor] = useState("4E44D8");
-  const [foregroundColor, setForegroundColor] = useState("FFFFFF");
+  const [backgroundColor, setBackgroundColor] = useState<string>(
+    defaultTheme.backgroundColor,
+  );
+  const [foregroundColor, setForegroundColor] = useState<string>(
+    defaultTheme.foregroundColor,
+  );
   const [asciiArt, setAsciiArt] = useState(defaultASCII);
   const [isGenerationDialogOpen, setIsGenerationDialogOpen] = useState(false);
 
@@ -135,16 +72,13 @@ const XeLLCustomizer = () => {
 
   /** Apply preset color */
   const handlePresetColor = (
-    colorName: keyof typeof CONSOLE_COLORS,
+    colorName: ConsoleColorName,
     isBackground: boolean,
   ) => {
-    const hexValue = CONSOLE_COLORS[colorName];
-    const rgbHex = bgrToRgb(hexValue);
-
     if (isBackground) {
-      setBackgroundColor(rgbHex);
+      setBackgroundColor(CONSOLE_COLORS[colorName]);
     } else {
-      setForegroundColor(rgbHex);
+      setForegroundColor(CONSOLE_COLORS[colorName]);
     }
   };
 
@@ -164,16 +98,14 @@ const XeLLCustomizer = () => {
   };
 
   /** Apply a theme preset */
-  const applyThemePreset = (preset: (typeof THEME_PRESETS)[0]) => {
-    setBackgroundColor(bgrToRgb(preset.backgroundColor));
-    setForegroundColor(bgrToRgb(preset.foregroundColor));
+  const applyThemePreset = (preset: ThemePreset) => {
+    setBackgroundColor(preset.backgroundColor);
+    setForegroundColor(preset.foregroundColor);
   };
 
   /** Generate color button classes based on the color value */
-  const getButtonTextClass = (bgrColor: string) => {
-    const rgb = bgrToRgb(bgrColor);
-    return isColorDark(rgb) ? "text-slate-50" : "text-slate-800";
-  };
+  const getButtonTextClass = (color: string) =>
+    isColorDark(color) ? "text-slate-50" : "text-slate-800";
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 dark:from-slate-950 dark:to-slate-900">
@@ -263,13 +195,13 @@ const XeLLCustomizer = () => {
                           <div
                             className="h-6 w-6 rounded-full border border-slate-300 shadow-sm"
                             style={{
-                              backgroundColor: `#${bgrToRgb(preset.backgroundColor)}`,
+                              backgroundColor: `#${preset.backgroundColor}`,
                             }}
                           ></div>
                           <div
                             className="h-6 w-6 rounded-full border border-slate-300 shadow-sm"
                             style={{
-                              backgroundColor: `#${bgrToRgb(preset.foregroundColor)}`,
+                              backgroundColor: `#${preset.foregroundColor}`,
                             }}
                           ></div>
                         </div>
@@ -286,33 +218,23 @@ const XeLLCustomizer = () => {
               <TabsContent value="background" className="space-y-6">
                 <div className="grid grid-cols-4 gap-2 md:grid-cols-6">
                   {Object.entries(CONSOLE_COLORS).map(([name, value]) => (
-                    <Tooltip key={name}>
-                      <TooltipTrigger asChild>
-                        <Button
-                          className={cn(
-                            "h-10 w-full cursor-pointer justify-start border transition-all hover:scale-105 hover:shadow-md",
-                            getButtonTextClass(value),
-                          )}
-                          style={{ backgroundColor: `#${bgrToRgb(value)}` }}
-                          onClick={() =>
-                            handlePresetColor(
-                              name as keyof typeof CONSOLE_COLORS,
-                              true,
-                            )
-                          }
-                        >
-                          <span className="truncate text-xs">
-                            {name.replace("CONSOLE_COLOR_", "")}
-                          </span>
-                          {backgroundColor === bgrToRgb(value) && (
-                            <Check className="ml-1 h-4 w-4" />
-                          )}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>0x{value}00</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <Button
+                      className={cn(
+                        "h-10 w-full cursor-pointer justify-start border transition-all hover:scale-105 hover:shadow-md",
+                        getButtonTextClass(value),
+                      )}
+                      style={{ backgroundColor: `#${value}` }}
+                      onClick={() =>
+                        handlePresetColor(name as ConsoleColorName, true)
+                      }
+                    >
+                      <span className="truncate text-xs">
+                        {name.replace("CONSOLE_COLOR_", "")}
+                      </span>
+                      {backgroundColor === value && (
+                        <Check className="ml-1 h-4 w-4" />
+                      )}
+                    </Button>
                   ))}
                 </div>
 
@@ -349,7 +271,7 @@ const XeLLCustomizer = () => {
                   <div className="flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 dark:bg-slate-800">
                     <Palette className="h-4 w-4 text-blue-500" />
                     <div className="font-mono text-sm">
-                      #{backgroundColor} · 0x{rgbToBgr(backgroundColor)}00
+                      #{backgroundColor} · {rgbToLibXenon(backgroundColor)}
                     </div>
                   </div>
                 </div>
@@ -359,33 +281,23 @@ const XeLLCustomizer = () => {
               <TabsContent value="foreground" className="space-y-6">
                 <div className="grid grid-cols-4 gap-2 md:grid-cols-6">
                   {Object.entries(CONSOLE_COLORS).map(([name, value]) => (
-                    <Tooltip key={name}>
-                      <TooltipTrigger asChild>
-                        <Button
-                          className={cn(
-                            "h-10 w-full cursor-pointer justify-start border transition-all hover:scale-105 hover:shadow-md",
-                            getButtonTextClass(value),
-                          )}
-                          style={{ backgroundColor: `#${bgrToRgb(value)}` }}
-                          onClick={() =>
-                            handlePresetColor(
-                              name as keyof typeof CONSOLE_COLORS,
-                              false,
-                            )
-                          }
-                        >
-                          <span className="truncate text-xs">
-                            {name.replace("CONSOLE_COLOR_", "")}
-                          </span>
-                          {foregroundColor === bgrToRgb(value) && (
-                            <Check className="ml-1 h-4 w-4" />
-                          )}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>0x{value}00</p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <Button
+                      className={cn(
+                        "h-10 w-full cursor-pointer justify-start border transition-all hover:scale-105 hover:shadow-md",
+                        getButtonTextClass(value),
+                      )}
+                      style={{ backgroundColor: `#${value}` }}
+                      onClick={() =>
+                        handlePresetColor(name as ConsoleColorName, false)
+                      }
+                    >
+                      <span className="truncate text-xs">
+                        {name.replace("CONSOLE_COLOR_", "")}
+                      </span>
+                      {foregroundColor === value && (
+                        <Check className="ml-1 h-4 w-4" />
+                      )}
+                    </Button>
                   ))}
                 </div>
 
@@ -422,7 +334,7 @@ const XeLLCustomizer = () => {
                   <div className="flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 dark:bg-slate-800">
                     <Palette className="h-4 w-4 text-blue-500" />
                     <div className="font-mono text-sm">
-                      #{foregroundColor} · 0x{rgbToBgr(foregroundColor)}00
+                      #{foregroundColor} · {rgbToLibXenon(foregroundColor)}
                     </div>
                   </div>
                 </div>
@@ -492,8 +404,8 @@ const XeLLCustomizer = () => {
         isOpen={isGenerationDialogOpen}
         onOpenChange={setIsGenerationDialogOpen}
         params={{
-          background_color: `0x${rgbToBgr(backgroundColor)}00`,
-          foreground_color: `0x${rgbToBgr(foregroundColor)}00`,
+          background_color: rgbToLibXenon(backgroundColor),
+          foreground_color: rgbToLibXenon(foregroundColor),
           ascii_art: asciiArt !== defaultASCII ? asciiArt : undefined,
         }}
       />

@@ -1,4 +1,4 @@
-export interface ASCIIPreset {
+interface ASCIIPreset {
   id: string;
   name: string;
   description: string;

@@ -100,7 +100,7 @@ export function GenerationDialog({
       const result = await startGeneration({
         background_color: params.background_color,
         foreground_color: params.foreground_color,
-        ascii_art: params.ascii_art ? btoa(params.ascii_art) : undefined,
+        ascii_art: params.ascii_art ? window.btoa(params.ascii_art) : undefined,
       });
 
       setGenerationId(result.id);
