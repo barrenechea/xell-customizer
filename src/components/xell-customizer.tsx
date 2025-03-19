@@ -387,8 +387,10 @@ const XeLLCustomizer = () => {
               <span className="text-slate-500 dark:text-slate-400">
                 Created by{" "}
                 <a
-                  href="https://github.com/barrenechea"
+                  href="https://www.barrenechea.cl"
                   className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   barrenechea
                 </a>
