@@ -403,6 +403,7 @@ const XeLLCustomizer = () => {
         </footer>
       </div>
       <GenerationDialog
+        key={isGenerationDialogOpen ? "open" : "closed"}
         isOpen={isGenerationDialogOpen}
         onOpenChange={setIsGenerationDialogOpen}
         params={{

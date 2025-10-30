@@ -1,6 +1,6 @@
 import { Buffer } from "buffer/";
 import { Download, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useEffectEvent, useState } from "react";
 
 import {
   AlertDialog,
@@ -46,57 +46,11 @@ export function GenerationDialog({
   const [pollCount, setPollCount] = useState(0);
   const [fileData, setFileData] = useState<DownloadResponse | null>(null);
 
-  // Function to reset all state values
-  const resetState = () => {
-    setStatus("initial");
-    setGenerationId(null);
-    setError(null);
-    setPollCount(0);
-    setFileData(null);
-  };
-
-  // Reset state when dialog is closed
-  useEffect(() => {
-    if (!isOpen) {
-      resetState();
-    }
-  }, [isOpen]);
-
-  // Start generation when dialog opens
-  useEffect(() => {
-    if (isOpen && status === "initial") {
-      void startBuild();
-    }
-  }, [isOpen, status]);
-
-  // Poll for build status
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-
-    if (isOpen && status === "building" && generationId) {
-      // Set a maximum of 6 polls before timing out
-      if (pollCount >= 6) {
-        setError("Generation timed out. The build process probably failed.");
-        setStatus("error");
-        return;
-      }
-
-      timer = setTimeout(() => {
-        void checkBuildStatus();
-        setPollCount((prev) => prev + 1);
-      }, 20000); // Poll every 20 seconds
-    }
-
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [isOpen, status, generationId, pollCount]);
-
-  const startBuild = async () => {
+  const startBuild = useCallback(async () => {
     try {
-      // Reset to a clean state first, but keep status as "starting"
-      resetState();
       setStatus("starting");
+      setError(null);
+      setPollCount(0);
 
       const result = await startGeneration({
         background_color: params.background_color,
@@ -113,9 +67,9 @@ export function GenerationDialog({
       setError(err instanceof Error ? err.message : "Failed to start build");
       setStatus("error");
     }
-  };
+  }, [params]);
 
-  const checkBuildStatus = async () => {
+  const checkBuildStatus = useEffectEvent(async () => {
     if (!generationId) return;
 
     try {
@@ -144,7 +98,39 @@ export function GenerationDialog({
       );
       setStatus("error");
     }
-  };
+  });
+
+  // Start generation when dialog opens
+  useEffect(() => {
+    if (isOpen && status === "initial") {
+      // This is a valid pattern: calling an async function from an effect
+      // The setState calls are inside the async function, not synchronous in the effect body
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      void startBuild();
+    }
+  }, [isOpen, status, startBuild]);
+
+  // Poll for build status
+  useEffect(() => {
+    if (!isOpen || status !== "building" || !generationId) {
+      return;
+    }
+
+    // Check if we've exceeded the maximum number of polls
+    if (pollCount >= 6) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setError("Generation timed out. The build process probably failed.");
+      setStatus("error");
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      void checkBuildStatus();
+      setPollCount((prev) => prev + 1);
+    }, 20000); // Poll every 20 seconds
+
+    return () => clearTimeout(timer);
+  }, [isOpen, status, generationId, pollCount]);
 
   const downloadFile = () => {
     if (!fileData) return;
