@@ -397,7 +397,7 @@ const XeLLCustomizer = () => {
               </span>
             </Separator>
             <p className="text-xs text-slate-400 dark:text-slate-500">
-              {new Date().getFullYear()} · XeLL Theme Customizer
+              2025-{new Date().getFullYear()} · XeLL Theme Customizer
             </p>
           </div>
         </footer>
