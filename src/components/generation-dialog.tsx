@@ -17,7 +17,7 @@ import { Progress } from "@/components/ui/progress";
 import {
   base64ToBlob,
   checkDownload,
-  DownloadResponse,
+  type DownloadResponse,
   type GenerationParams,
   startGeneration,
 } from "@/lib/generation-service";

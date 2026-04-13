@@ -8,7 +8,7 @@ import {
   Pipette,
   Terminal,
 } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { type ChangeEvent, useState } from "react";
 
 import { GenerationDialog } from "@/components/generation-dialog";
 import { Button } from "@/components/ui/button";
