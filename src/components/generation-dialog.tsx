@@ -15,9 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
-  base64ToBlob,
-  checkDownload,
-  type DownloadResponse,
+  checkBuildStatus,
   type GenerationParams,
   startGeneration,
 } from "@/lib/generation-service";
@@ -35,6 +33,11 @@ type GenerationStatus =
   | "ready" // Build is ready to download
   | "error"; // An error occurred
 
+interface DownloadInfo {
+  filename: string;
+  downloadUrl: string;
+}
+
 export function GenerationDialog({
   isOpen,
   onOpenChange,
@@ -42,14 +45,20 @@ export function GenerationDialog({
 }: GenerationDialogProps) {
   const [status, setStatus] = useState<GenerationStatus>("initial");
   const [generationId, setGenerationId] = useState<string | null>(null);
+  const [generationDate, setGenerationDate] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [logUrl, setLogUrl] = useState<string | null>(null);
   const [pollCount, setPollCount] = useState(0);
-  const [fileData, setFileData] = useState<DownloadResponse | null>(null);
+  const [downloadInfo, setDownloadInfo] = useState<DownloadInfo | null>(null);
+  const [blobUrl, setBlobUrl] = useState<string | null>(null);
 
   const startBuild = useCallback(async () => {
     try {
       setStatus("starting");
       setError(null);
+      setLogUrl(null);
+      setDownloadInfo(null);
+      setBlobUrl(null);
       setPollCount(0);
 
       const result = await startGeneration({
@@ -61,6 +70,7 @@ export function GenerationDialog({
       });
 
       setGenerationId(result.id);
+      setGenerationDate(result.date);
       setStatus("building");
     } catch (err) {
       console.error("Failed to start build:", err);
@@ -69,29 +79,30 @@ export function GenerationDialog({
     }
   }, [params]);
 
-  const checkBuildStatus = useEffectEvent(async () => {
-    if (!generationId) return;
+  const pollBuildStatus = useEffectEvent(async () => {
+    if (!generationId || !generationDate) return;
 
     try {
-      const result = await checkDownload(generationId);
+      const result = await checkBuildStatus(generationId, generationDate);
 
-      if (result.error) {
-        setError(result.error);
+      if (!result.ready) return;
+
+      if (result.failed) {
+        setError("Build failed. Please try again.");
+        setLogUrl(result.logUrl ?? null);
         setStatus("error");
         return;
       }
 
-      if (result.file) {
-        setFileData(result);
-        setStatus("ready");
-      }
-    } catch (err) {
-      // If we get a "not ready" error, keep polling
-      if (err instanceof Error && err.message === "File not processed yet") {
-        return;
-      }
+      const downloadUrl = result.downloadUrl!;
+      const response = await fetch(downloadUrl);
+      if (!response.ok) throw new Error("Failed to fetch build artifact");
+      const blob = await response.blob();
 
-      // Otherwise, show the error
+      setDownloadInfo({ filename: result.filename!, downloadUrl });
+      setBlobUrl(URL.createObjectURL(blob));
+      setStatus("ready");
+    } catch (err) {
       console.error("Failed to check build status:", err);
       setError(
         err instanceof Error ? err.message : "Failed to check build status",
@@ -99,6 +110,13 @@ export function GenerationDialog({
       setStatus("error");
     }
   });
+
+  // Revoke the blob URL when it's replaced or the component unmounts
+  useEffect(() => {
+    return () => {
+      if (blobUrl) URL.revokeObjectURL(blobUrl);
+    };
+  }, [blobUrl]);
 
   // Start generation when dialog opens
   useEffect(() => {
@@ -117,7 +135,7 @@ export function GenerationDialog({
     }
 
     // Check if we've exceeded the maximum number of polls
-    if (pollCount >= 6) {
+    if (pollCount >= 10) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setError("Generation timed out. The build process probably failed.");
       setStatus("error");
@@ -125,7 +143,7 @@ export function GenerationDialog({
     }
 
     const timer = setTimeout(() => {
-      void checkBuildStatus();
+      void pollBuildStatus();
       setPollCount((prev) => prev + 1);
     }, 20000); // Poll every 20 seconds
 
@@ -133,26 +151,16 @@ export function GenerationDialog({
   }, [isOpen, status, generationId, pollCount]);
 
   const downloadFile = () => {
-    if (!fileData) return;
+    if (!downloadInfo || !blobUrl) return;
 
-    try {
-      const blob = base64ToBlob(fileData.file);
-      const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = downloadInfo.filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileData.filename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      onOpenChange(false);
-    } catch (err) {
-      console.error("Failed to download file:", err);
-      setError("Failed to download the file");
-      setStatus("error");
-    }
+    onOpenChange(false);
   };
 
   const getStatusMessage = () => {
@@ -206,7 +214,17 @@ export function GenerationDialog({
 
           {status === "error" && (
             <div className="bg-destructive/10 text-destructive mt-4 rounded-md p-3 text-sm">
-              {error}
+              <span>{error}</span>
+              {logUrl && (
+                <Button
+                  variant="link"
+                  size="sm"
+                  className="mt-1 h-auto p-0 text-destructive"
+                  onClick={() => window.open(logUrl, "_blank")}
+                >
+                  Check build log
+                </Button>
+              )}
             </div>
           )}
         </AlertDialogHeader>
