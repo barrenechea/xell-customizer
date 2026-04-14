@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://xell-api.barrenechea.cl";
+const API_BASE_URL = "https://xell-customizer-api.barrenechea.workers.dev";
 const GITHUB_BASE_URL =
   "https://raw.githubusercontent.com/xell-worker/xell-builder/refs/heads/main";
 
