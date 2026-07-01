@@ -219,7 +219,7 @@ export function GenerationDialog({
                 <Button
                   variant="link"
                   size="sm"
-                  className="mt-1 h-auto p-0 text-destructive"
+                  className="text-destructive mt-1 h-auto p-0"
                   onClick={() => window.open(logUrl, "_blank")}
                 >
                   Check build log
