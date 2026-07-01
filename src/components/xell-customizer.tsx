@@ -9,6 +9,7 @@ import {
   Terminal,
 } from "lucide-react";
 import { type ChangeEvent, useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import { GenerationDialog } from "@/components/generation-dialog";
 import { Button } from "@/components/ui/button";
@@ -59,6 +60,8 @@ Waiting for link...link still down.
 `;
 
 const XeLLCustomizer = () => {
+  const { t } = useTranslation();
+
   const [backgroundColor, setBackgroundColor] = useState<string>(
     defaultTheme.backgroundColor,
   );
@@ -87,7 +90,6 @@ const XeLLCustomizer = () => {
     e: ChangeEvent<HTMLInputElement>,
     isBackground: boolean,
   ) => {
-    // Remove the # from the hex color
     const hexColor = e.target.value.substring(1);
 
     if (isBackground) {
@@ -109,6 +111,16 @@ const XeLLCustomizer = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 dark:from-slate-950 dark:to-slate-900">
+      <a
+        className="github-fork-ribbon hidden md:block"
+        href="https://github.com/barrenechea/xell-customizer"
+        data-ribbon={t("github.ribbon")}
+        title={t("github.ribbon")}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {t("github.ribbon")}
+      </a>
       <div className="container mx-auto max-w-5xl px-4 py-8">
         {/* Header Section */}
         <div className="mb-10 text-center">
@@ -116,11 +128,10 @@ const XeLLCustomizer = () => {
             <Terminal className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           </div>
           <h1 className="mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-4xl font-bold text-transparent">
-            XeLL Theme Customizer
+            {t("app.title")}
           </h1>
           <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400">
-            Customize the appearance of your XeLL console with colors and ASCII
-            art
+            {t("app.subtitle")}
           </p>
 
           {/* Contributors scroller */}
@@ -132,9 +143,9 @@ const XeLLCustomizer = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Monitor className="h-5 w-5 text-purple-500" />
-              Console Preview
+              {t("preview.title")}
             </CardTitle>
-            <CardDescription>Live preview of your XeLL console</CardDescription>
+            <CardDescription>{t("preview.description")}</CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             {/* Monitor Display */}
@@ -166,17 +177,19 @@ const XeLLCustomizer = () => {
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2">
               <Layout className="h-5 w-5 text-purple-500" />
-              Settings
+              {t("settings.title")}
             </CardTitle>
-            <CardDescription>Customize your console appearance</CardDescription>
+            <CardDescription>{t("settings.description")}</CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="presets" className="w-full">
               <TabsList className="mb-4 grid w-full grid-cols-4">
-                <TabsTrigger value="presets">Presets</TabsTrigger>
-                <TabsTrigger value="background">Background</TabsTrigger>
-                <TabsTrigger value="foreground">Text</TabsTrigger>
-                <TabsTrigger value="ascii">ASCII Art</TabsTrigger>
+                <TabsTrigger value="presets">{t("tabs.presets")}</TabsTrigger>
+                <TabsTrigger value="background">
+                  {t("tabs.background")}
+                </TabsTrigger>
+                <TabsTrigger value="foreground">{t("tabs.text")}</TabsTrigger>
+                <TabsTrigger value="ascii">{t("tabs.ascii")}</TabsTrigger>
               </TabsList>
 
               {/* Presets Tab */}
@@ -190,7 +203,9 @@ const XeLLCustomizer = () => {
                       variant="outline"
                     >
                       <div className="flex w-full items-center justify-between">
-                        <span className="font-semibold">{preset.name}</span>
+                        <span className="font-semibold">
+                          {t(`themeColors.${preset.id}.name`)}
+                        </span>
                         <div className="flex items-center space-x-2">
                           <div
                             className="h-6 w-6 rounded-full border border-slate-300 shadow-sm"
@@ -207,7 +222,7 @@ const XeLLCustomizer = () => {
                         </div>
                       </div>
                       <p className="mt-1 text-left text-xs text-wrap text-slate-500 dark:text-slate-400">
-                        {preset.description}
+                        {t(`themeColors.${preset.id}.description`)}
                       </p>
                     </Button>
                   ))}
@@ -219,6 +234,7 @@ const XeLLCustomizer = () => {
                 <div className="grid grid-cols-4 gap-2 md:grid-cols-6">
                   {Object.entries(CONSOLE_COLORS).map(([name, value]) => (
                     <Button
+                      key={name}
                       className={cn(
                         "h-10 w-full cursor-pointer justify-start border transition-all hover:scale-105 hover:shadow-md",
                         getButtonTextClass(value),
@@ -228,8 +244,10 @@ const XeLLCustomizer = () => {
                         handlePresetColor(name as ConsoleColorName, true)
                       }
                     >
-                      <span className="truncate text-xs">
-                        {name.replace("CONSOLE_COLOR_", "")}
+                      <span className="truncate text-xs uppercase">
+                        {t(
+                          `colors.${name.replace("CONSOLE_COLOR_", "").toLowerCase()}`,
+                        )}
                       </span>
                       {backgroundColor === value && (
                         <Check className="ml-1 h-4 w-4" />
@@ -238,7 +256,7 @@ const XeLLCustomizer = () => {
                   ))}
                 </div>
 
-                <Separator>Or choose your own</Separator>
+                <Separator>{t("separator.choose_own")}</Separator>
 
                 <div className="flex flex-col items-center space-y-4">
                   <div className="relative">
@@ -256,7 +274,7 @@ const XeLLCustomizer = () => {
                         value={`#${backgroundColor}`}
                         onChange={(e) => handleColorWheelChange(e, true)}
                         className="absolute h-full w-full cursor-pointer opacity-0"
-                        aria-label="Select background color"
+                        aria-label={t("aria.bg_color")}
                       />
                       <Pipette
                         className={cn(
@@ -282,6 +300,7 @@ const XeLLCustomizer = () => {
                 <div className="grid grid-cols-4 gap-2 md:grid-cols-6">
                   {Object.entries(CONSOLE_COLORS).map(([name, value]) => (
                     <Button
+                      key={name}
                       className={cn(
                         "h-10 w-full cursor-pointer justify-start border transition-all hover:scale-105 hover:shadow-md",
                         getButtonTextClass(value),
@@ -291,8 +310,10 @@ const XeLLCustomizer = () => {
                         handlePresetColor(name as ConsoleColorName, false)
                       }
                     >
-                      <span className="truncate text-xs">
-                        {name.replace("CONSOLE_COLOR_", "")}
+                      <span className="truncate text-xs uppercase">
+                        {t(
+                          `colors.${name.replace("CONSOLE_COLOR_", "").toLowerCase()}`,
+                        )}
                       </span>
                       {foregroundColor === value && (
                         <Check className="ml-1 h-4 w-4" />
@@ -301,7 +322,7 @@ const XeLLCustomizer = () => {
                   ))}
                 </div>
 
-                <Separator>Or choose your own</Separator>
+                <Separator>{t("separator.choose_own")}</Separator>
 
                 <div className="flex flex-col items-center space-y-4">
                   <div className="relative">
@@ -319,7 +340,7 @@ const XeLLCustomizer = () => {
                         value={`#${foregroundColor}`}
                         onChange={(e) => handleColorWheelChange(e, false)}
                         className="absolute h-full w-full cursor-pointer opacity-0"
-                        aria-label="Select foreground color"
+                        aria-label={t("aria.fg_color")}
                       />
                       <Pipette
                         className={cn(
@@ -352,18 +373,18 @@ const XeLLCustomizer = () => {
                       disabled={asciiArt === preset.value}
                     >
                       <Brush className="h-4 w-4 text-blue-500" />
-                      {preset.name}
+                      {t(`asciiPresets.${preset.id}.name`)}
                     </Button>
                   ))}
                 </div>
 
-                <Separator>Or create your own</Separator>
+                <Separator>{t("separator.create_own")}</Separator>
 
                 <Textarea
                   value={asciiArt}
                   onChange={(e) => setAsciiArt(e.target.value)}
                   className="min-h-[200px] resize-none overflow-x-auto font-mono text-xs leading-none whitespace-pre"
-                  placeholder="Enter your ASCII art here..."
+                  placeholder={t("ascii.placeholder")}
                 />
               </TabsContent>
             </Tabs>
@@ -374,7 +395,7 @@ const XeLLCustomizer = () => {
                 size="lg"
               >
                 <Download className="h-4 w-4" />
-                Generate Custom XeLL Build
+                {t("generate.button")}
               </Button>
             </div>
           </CardContent>
@@ -385,19 +406,20 @@ const XeLLCustomizer = () => {
           <div className="flex flex-col space-y-2">
             <Separator>
               <span className="text-slate-500 dark:text-slate-400">
-                Created by{" "}
-                <a
-                  href="https://www.barrenechea.cl"
-                  className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  barrenechea
-                </a>
+                <Trans i18nKey="footer.created_by">
+                  <a
+                    href="https://www.barrenechea.cl"
+                    className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    barrenechea
+                  </a>
+                </Trans>
               </span>
             </Separator>
             <p className="text-xs text-slate-400 dark:text-slate-500">
-              2025-{new Date().getFullYear()} · XeLL Theme Customizer
+              2025-{new Date().getFullYear()} · {t("footer.title")}
             </p>
           </div>
         </footer>

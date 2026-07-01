@@ -23,30 +23,21 @@ export type ConsoleColorName = keyof typeof CONSOLE_COLORS;
 export const THEME_PRESETS = [
   {
     id: "default",
-    name: "Default Theme",
-    description: "Classic XeLL blue background with white text",
     backgroundColor: CONSOLE_COLORS.CONSOLE_COLOR_BLUE,
     foregroundColor: CONSOLE_COLORS.CONSOLE_COLOR_WHITE,
   },
   {
     id: "swizzy",
-    name: "Swizzy Theme",
-    description: "Black background with orange text - Swizzy's favorite!",
     backgroundColor: CONSOLE_COLORS.CONSOLE_COLOR_BLACK,
     foregroundColor: CONSOLE_COLORS.CONSOLE_COLOR_ORANGE,
   },
   {
     id: "xtudo",
-    name: "XTUDO Theme",
-    description: "Black background with pink text - Niceshot's favorite!",
     backgroundColor: CONSOLE_COLORS.CONSOLE_COLOR_BLACK,
     foregroundColor: CONSOLE_COLORS.CONSOLE_COLOR_PINK,
   },
   {
     id: "classic",
-    name: "Retro Theme",
-    description:
-      "Reminiscent of vintage green phosphor CRT terminals from the early computing era",
     backgroundColor: CONSOLE_COLORS.CONSOLE_COLOR_BLACK,
     foregroundColor: CONSOLE_COLORS.CONSOLE_COLOR_GREEN,
   },

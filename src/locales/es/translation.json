@@ -1,0 +1,116 @@
+{
+  "app": {
+    "title": "Personalizador de tema XeLL",
+    "subtitle": "Personaliza la apariencia de tu consola XeLL con colores y arte ASCII"
+  },
+  "preview": {
+    "title": "Vista previa de la consola",
+    "description": "Vista previa en vivo de tu consola XeLL"
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Personaliza la apariencia de tu consola"
+  },
+  "tabs": {
+    "presets": "Preajustes",
+    "background": "Fondo",
+    "text": "Texto",
+    "ascii": "Arte ASCII"
+  },
+  "separator": {
+    "choose_own": "O elige uno propio",
+    "create_own": "O crea uno propio"
+  },
+  "generate": {
+    "button": "Generar compilación personalizada de XeLL"
+  },
+  "ascii": {
+    "placeholder": "Introduce tu arte ASCII aquí..."
+  },
+  "footer": {
+    "created_by": "Creado por <0>barrenechea</0>",
+    "title": "Personalizador de tema XeLL"
+  },
+  "contributors": {
+    "thanks": "Gracias a:"
+  },
+  "github": {
+    "ribbon": "Contribuye en GitHub"
+  },
+  "aria": {
+    "bg_color": "Seleccionar color de fondo",
+    "fg_color": "Seleccionar color de texto"
+  },
+  "colors": {
+    "red": "Rojo",
+    "blue": "Azul",
+    "green": "Verde",
+    "black": "Negro",
+    "white": "Blanco",
+    "grey": "Gris",
+    "brown": "Marrón",
+    "purple": "Morado",
+    "yellow": "Amarillo",
+    "orange": "Naranja",
+    "pink": "Rosa"
+  },
+  "themeColors": {
+    "default": {
+      "name": "Tema predeterminado",
+      "description": "Fondo azul clásico de XeLL con texto blanco"
+    },
+    "swizzy": {
+      "name": "Tema Swizzy",
+      "description": "Fondo negro con texto naranja: ¡el favorito de Swizzy!"
+    },
+    "xtudo": {
+      "name": "Tema XTUDO",
+      "description": "Fondo negro con texto rosa: ¡el favorito de Niceshot!"
+    },
+    "classic": {
+      "name": "Tema retro",
+      "description": "Evoca los antiguos terminales CRT de fósforo verde de los inicios de la informática"
+    }
+  },
+  "asciiPresets": {
+    "xell-reloaded": {
+      "name": "XeLL Reloaded",
+      "description": "El clásico logo de XeLL Reloaded"
+    },
+    "free60": {
+      "name": "Free60",
+      "description": "El logo del proyecto Free60 del XeLL original"
+    },
+    "razor1911": {
+      "name": "Razor1911",
+      "description": "El logo del grupo warez y demoscene Razor1911"
+    }
+  },
+  "generation": {
+    "title": {
+      "generating": "Generando XeLL Personalizado",
+      "ready": "¡Compilación completada!"
+    },
+    "status": {
+      "initial": "Preparando la generación de la compilación personalizada de XeLL...",
+      "starting": "Iniciando el proceso de compilación...",
+      "building": "Compilando tu imagen XeLL personalizada. Esto debería tomar alrededor de un minuto...",
+      "ready": "¡Tu compilación personalizada de XeLL está lista!",
+      "error": "Ocurrió un error durante la generación"
+    },
+    "error": {
+      "start_failed": "Error al iniciar la compilación",
+      "build_failed": "La compilación falló. Por favor, inténtalo de nuevo.",
+      "status_check": "Error al verificar el estado de la compilación",
+      "timeout": "Tiempo de generación agotado. El proceso de compilación probablemente falló.",
+      "fetch_artifact": "Error al obtener el artefacto de compilación"
+    },
+    "button": {
+      "download": "Descargar compilación de XeLL",
+      "cancel": "Cancelar",
+      "try_again": "Intentar de nuevo",
+      "check_log": "Ver registro de compilación",
+      "building": "Compilando..."
+    }
+  }
+}

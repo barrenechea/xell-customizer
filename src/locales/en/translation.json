@@ -1,0 +1,116 @@
+{
+  "app": {
+    "title": "XeLL Theme Customizer",
+    "subtitle": "Customize the appearance of your XeLL console with colors and ASCII art"
+  },
+  "preview": {
+    "title": "Console Preview",
+    "description": "Live preview of your XeLL console"
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Customize your console appearance"
+  },
+  "tabs": {
+    "presets": "Presets",
+    "background": "Background",
+    "text": "Text",
+    "ascii": "ASCII Art"
+  },
+  "separator": {
+    "choose_own": "Or choose your own",
+    "create_own": "Or create your own"
+  },
+  "generate": {
+    "button": "Generate Custom XeLL Build"
+  },
+  "ascii": {
+    "placeholder": "Enter your ASCII art here..."
+  },
+  "footer": {
+    "created_by": "Created by <0>barrenechea</0>",
+    "title": "XeLL Theme Customizer"
+  },
+  "contributors": {
+    "thanks": "Thanks to:"
+  },
+  "github": {
+    "ribbon": "Contribute on GitHub"
+  },
+  "aria": {
+    "bg_color": "Select background color",
+    "fg_color": "Select foreground color"
+  },
+  "colors": {
+    "red": "Red",
+    "blue": "Blue",
+    "green": "Green",
+    "black": "Black",
+    "white": "White",
+    "grey": "Grey",
+    "brown": "Brown",
+    "purple": "Purple",
+    "yellow": "Yellow",
+    "orange": "Orange",
+    "pink": "Pink"
+  },
+  "themeColors": {
+    "default": {
+      "name": "Default Theme",
+      "description": "Classic XeLL blue background with white text"
+    },
+    "swizzy": {
+      "name": "Swizzy Theme",
+      "description": "Black background with orange text - Swizzy's favorite!"
+    },
+    "xtudo": {
+      "name": "XTUDO Theme",
+      "description": "Black background with pink text - Niceshot's favorite!"
+    },
+    "classic": {
+      "name": "Retro Theme",
+      "description": "Reminiscent of vintage green phosphor CRT terminals from the early computing era"
+    }
+  },
+  "asciiPresets": {
+    "xell-reloaded": {
+      "name": "XeLL Reloaded",
+      "description": "The classic XeLL Reloaded logo"
+    },
+    "free60": {
+      "name": "Free60",
+      "description": "The Free60 project logo found in the original XeLL"
+    },
+    "razor1911": {
+      "name": "Razor1911",
+      "description": "The Razor1911 warez and demogroup logo"
+    }
+  },
+  "generation": {
+    "title": {
+      "generating": "Generating Custom XeLL",
+      "ready": "Build Complete!"
+    },
+    "status": {
+      "initial": "Preparing to generate custom XeLL build...",
+      "starting": "Starting the build process...",
+      "building": "Building your custom XeLL image. This should take around a minute...",
+      "ready": "Your custom XeLL build is ready!",
+      "error": "An error occurred during generation"
+    },
+    "error": {
+      "start_failed": "Failed to start build",
+      "build_failed": "Build failed. Please try again.",
+      "status_check": "Failed to check build status",
+      "timeout": "Generation timed out. The build process probably failed.",
+      "fetch_artifact": "Failed to fetch build artifact"
+    },
+    "button": {
+      "download": "Download XeLL Build",
+      "cancel": "Cancel",
+      "try_again": "Try Again",
+      "check_log": "Check build log",
+      "building": "Building..."
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { Buffer } from "buffer/";
 import { Download, Loader2 } from "lucide-react";
 import { useCallback, useEffect, useEffectEvent, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import {
   AlertDialog,
@@ -26,12 +27,7 @@ interface GenerationDialogProps {
   params: GenerationParams;
 }
 
-type GenerationStatus =
-  | "initial" // Before generation starts
-  | "starting" // Making the initial API call
-  | "building" // Waiting for build to complete
-  | "ready" // Build is ready to download
-  | "error"; // An error occurred
+type GenerationStatus = "initial" | "starting" | "building" | "ready" | "error";
 
 interface DownloadInfo {
   filename: string;
@@ -43,6 +39,7 @@ export function GenerationDialog({
   onOpenChange,
   params,
 }: GenerationDialogProps) {
+  const { t } = useTranslation();
   const [status, setStatus] = useState<GenerationStatus>("initial");
   const [generationId, setGenerationId] = useState<string | null>(null);
   const [generationDate, setGenerationDate] = useState<string | null>(null);
@@ -74,10 +71,12 @@ export function GenerationDialog({
       setStatus("building");
     } catch (err) {
       console.error("Failed to start build:", err);
-      setError(err instanceof Error ? err.message : "Failed to start build");
+      setError(
+        err instanceof Error ? err.message : t("generation.error.start_failed"),
+      );
       setStatus("error");
     }
-  }, [params]);
+  }, [params, t]);
 
   const pollBuildStatus = useEffectEvent(async () => {
     if (!generationId || !generationDate) return;
@@ -88,7 +87,7 @@ export function GenerationDialog({
       if (!result.ready) return;
 
       if (result.failed) {
-        setError("Build failed. Please try again.");
+        setError(t("generation.error.build_failed"));
         setLogUrl(result.logUrl ?? null);
         setStatus("error");
         return;
@@ -96,7 +95,7 @@ export function GenerationDialog({
 
       const downloadUrl = result.downloadUrl!;
       const response = await fetch(downloadUrl);
-      if (!response.ok) throw new Error("Failed to fetch build artifact");
+      if (!response.ok) throw new Error(t("generation.error.fetch_artifact"));
       const blob = await response.blob();
 
       setDownloadInfo({ filename: result.filename!, downloadUrl });
@@ -105,20 +104,18 @@ export function GenerationDialog({
     } catch (err) {
       console.error("Failed to check build status:", err);
       setError(
-        err instanceof Error ? err.message : "Failed to check build status",
+        err instanceof Error ? err.message : t("generation.error.status_check"),
       );
       setStatus("error");
     }
   });
 
-  // Revoke the blob URL when it's replaced or the component unmounts
   useEffect(() => {
     return () => {
       if (blobUrl) URL.revokeObjectURL(blobUrl);
     };
   }, [blobUrl]);
 
-  // Start generation when dialog opens
   useEffect(() => {
     if (isOpen && status === "initial") {
       // This is a valid pattern: calling an async function from an effect
@@ -128,16 +125,14 @@ export function GenerationDialog({
     }
   }, [isOpen, status, startBuild]);
 
-  // Poll for build status
   useEffect(() => {
     if (!isOpen || status !== "building" || !generationId) {
       return;
     }
 
-    // Check if we've exceeded the maximum number of polls
     if (pollCount >= 10) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setError("Generation timed out. The build process probably failed.");
+      setError(t("generation.error.timeout"));
       setStatus("error");
       return;
     }
@@ -145,10 +140,10 @@ export function GenerationDialog({
     const timer = setTimeout(() => {
       void pollBuildStatus();
       setPollCount((prev) => prev + 1);
-    }, 20000); // Poll every 20 seconds
+    }, 20000);
 
     return () => clearTimeout(timer);
-  }, [isOpen, status, generationId, pollCount]);
+  }, [isOpen, status, generationId, pollCount, t]);
 
   const downloadFile = () => {
     if (!downloadInfo || !blobUrl) return;
@@ -166,15 +161,15 @@ export function GenerationDialog({
   const getStatusMessage = () => {
     switch (status) {
       case "initial":
-        return "Preparing to generate custom XeLL build...";
+        return t("generation.status.initial");
       case "starting":
-        return "Starting the build process...";
+        return t("generation.status.starting");
       case "building":
-        return "Building your custom XeLL image. This should take around a minute...";
+        return t("generation.status.building");
       case "ready":
-        return "Your custom XeLL build is ready!";
+        return t("generation.status.ready");
       case "error":
-        return error ?? "An error occurred during generation";
+        return error ?? t("generation.status.error");
     }
   };
 
@@ -202,7 +197,9 @@ export function GenerationDialog({
       <AlertDialogContent className="max-w-md">
         <AlertDialogHeader>
           <AlertDialogTitle>
-            {status === "ready" ? "Build Complete!" : "Generating Custom XeLL"}
+            {status === "ready"
+              ? t("generation.title.ready")
+              : t("generation.title.generating")}
           </AlertDialogTitle>
           <AlertDialogDescription className="py-2">
             {getStatusMessage()}
@@ -222,7 +219,7 @@ export function GenerationDialog({
                   className="text-destructive mt-1 h-auto p-0"
                   onClick={() => window.open(logUrl, "_blank")}
                 >
-                  Check build log
+                  {t("generation.button.check_log")}
                 </Button>
               )}
             </div>
@@ -233,11 +230,15 @@ export function GenerationDialog({
           {status === "ready" ? (
             <AlertDialogAction onClick={downloadFile}>
               <Download className="mr-2 h-4 w-4" />
-              Download XeLL Build
+              {t("generation.button.download")}
             </AlertDialogAction>
           ) : (
             <>
-              {!isLoading && <AlertDialogCancel>Cancel</AlertDialogCancel>}
+              {!isLoading && (
+                <AlertDialogCancel>
+                  {t("generation.button.cancel")}
+                </AlertDialogCancel>
+              )}
 
               {status === "error" && (
                 <AlertDialogAction
@@ -246,14 +247,14 @@ export function GenerationDialog({
                     void startBuild();
                   }}
                 >
-                  Try Again
+                  {t("generation.button.try_again")}
                 </AlertDialogAction>
               )}
 
               {isLoading && (
                 <Button disabled variant="outline" className="gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Building...
+                  {t("generation.button.building")}
                 </Button>
               )}
             </>
