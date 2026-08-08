@@ -217,7 +217,9 @@ export function GenerationDialog({
                   variant="link"
                   size="sm"
                   className="text-destructive mt-1 h-auto p-0"
-                  onClick={() => window.open(logUrl, "_blank")}
+                  onClick={() =>
+                    window.open(logUrl, "_blank", "noopener,noreferrer")
+                  }
                 >
                   {t("generation.button.check_log")}
                 </Button>

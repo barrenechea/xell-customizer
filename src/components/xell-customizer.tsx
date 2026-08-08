@@ -1,16 +1,8 @@
-import {
-  Brush,
-  Check,
-  Download,
-  Layout,
-  Monitor,
-  Palette,
-  Pipette,
-  Terminal,
-} from "lucide-react";
-import { type ChangeEvent, useState } from "react";
+import { Brush, Download, Layout, Monitor, Terminal } from "lucide-react";
+import { useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
+import { ColorPicker } from "@/components/color-picker";
 import { GenerationDialog } from "@/components/generation-dialog";
 import { Button } from "@/components/ui/button";
 import {
@@ -26,15 +18,11 @@ import { Textarea } from "@/components/ui/textarea";
 import ContributorsScroller from "@/components/xell-contributors";
 import { asciiPresets, defaultASCII } from "@/lib/ascii-presets";
 import {
-  CONSOLE_COLORS,
-  type ConsoleColorName,
   defaultTheme,
-  isColorDark,
   rgbToLibXenon,
   THEME_PRESETS,
   type ThemePreset,
 } from "@/lib/theme-colors";
-import { cn } from "@/lib/utils";
 
 const today = new Date().toISOString().split("T")[0];
 const gitData = "v0.993-git-7526b02";
@@ -73,41 +61,10 @@ const XeLLCustomizer = () => {
 
   const consoleText = `${outputHeader}${asciiArt}${outputFooter}`;
 
-  /** Apply preset color */
-  const handlePresetColor = (
-    colorName: ConsoleColorName,
-    isBackground: boolean,
-  ) => {
-    if (isBackground) {
-      setBackgroundColor(CONSOLE_COLORS[colorName]);
-    } else {
-      setForegroundColor(CONSOLE_COLORS[colorName]);
-    }
-  };
-
-  /** Handle color wheel change */
-  const handleColorWheelChange = (
-    e: ChangeEvent<HTMLInputElement>,
-    isBackground: boolean,
-  ) => {
-    const hexColor = e.target.value.substring(1);
-
-    if (isBackground) {
-      setBackgroundColor(hexColor);
-    } else {
-      setForegroundColor(hexColor);
-    }
-  };
-
-  /** Apply a theme preset */
   const applyThemePreset = (preset: ThemePreset) => {
     setBackgroundColor(preset.backgroundColor);
     setForegroundColor(preset.foregroundColor);
   };
-
-  /** Generate color button classes based on the color value */
-  const getButtonTextClass = (color: string) =>
-    isColorDark(color) ? "text-slate-50" : "text-slate-800";
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-200 dark:from-slate-950 dark:to-slate-900">
@@ -230,135 +187,21 @@ const XeLLCustomizer = () => {
               </TabsContent>
 
               {/* Background Color Tab */}
-              <TabsContent value="background" className="space-y-6">
-                <div className="grid grid-cols-4 gap-2 md:grid-cols-6">
-                  {Object.entries(CONSOLE_COLORS).map(([name, value]) => (
-                    <Button
-                      key={name}
-                      className={cn(
-                        "h-10 w-full cursor-pointer justify-start border transition-all hover:scale-105 hover:shadow-md",
-                        getButtonTextClass(value),
-                      )}
-                      style={{ backgroundColor: `#${value}` }}
-                      onClick={() =>
-                        handlePresetColor(name as ConsoleColorName, true)
-                      }
-                    >
-                      <span className="truncate text-xs uppercase">
-                        {t(
-                          `colors.${name.replace("CONSOLE_COLOR_", "").toLowerCase()}`,
-                        )}
-                      </span>
-                      {backgroundColor === value && (
-                        <Check className="ml-1 h-4 w-4" />
-                      )}
-                    </Button>
-                  ))}
-                </div>
-
-                <Separator>{t("separator.choose_own")}</Separator>
-
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="relative">
-                    <div
-                      className={cn(
-                        "group relative flex h-32 w-32 cursor-pointer items-center justify-center rounded-lg border-2 shadow-sm transition-all hover:scale-105 hover:shadow-md",
-                        isColorDark(backgroundColor)
-                          ? "border-slate-50"
-                          : "border-slate-800",
-                      )}
-                      style={{ backgroundColor: `#${backgroundColor}` }}
-                    >
-                      <input
-                        type="color"
-                        value={`#${backgroundColor}`}
-                        onChange={(e) => handleColorWheelChange(e, true)}
-                        className="absolute h-full w-full cursor-pointer opacity-0"
-                        aria-label={t("aria.bg_color")}
-                      />
-                      <Pipette
-                        className={cn(
-                          "h-8 w-8 opacity-80 transition-opacity group-hover:opacity-100",
-                          isColorDark(backgroundColor)
-                            ? "text-slate-50"
-                            : "text-slate-800",
-                        )}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 dark:bg-slate-800">
-                    <Palette className="h-4 w-4 text-blue-500" />
-                    <div className="font-mono text-sm">
-                      #{backgroundColor} · {rgbToLibXenon(backgroundColor)}
-                    </div>
-                  </div>
-                </div>
+              <TabsContent value="background">
+                <ColorPicker
+                  color={backgroundColor}
+                  setColor={setBackgroundColor}
+                  isBackground
+                />
               </TabsContent>
 
               {/* Foreground Color Tab */}
-              <TabsContent value="foreground" className="space-y-6">
-                <div className="grid grid-cols-4 gap-2 md:grid-cols-6">
-                  {Object.entries(CONSOLE_COLORS).map(([name, value]) => (
-                    <Button
-                      key={name}
-                      className={cn(
-                        "h-10 w-full cursor-pointer justify-start border transition-all hover:scale-105 hover:shadow-md",
-                        getButtonTextClass(value),
-                      )}
-                      style={{ backgroundColor: `#${value}` }}
-                      onClick={() =>
-                        handlePresetColor(name as ConsoleColorName, false)
-                      }
-                    >
-                      <span className="truncate text-xs uppercase">
-                        {t(
-                          `colors.${name.replace("CONSOLE_COLOR_", "").toLowerCase()}`,
-                        )}
-                      </span>
-                      {foregroundColor === value && (
-                        <Check className="ml-1 h-4 w-4" />
-                      )}
-                    </Button>
-                  ))}
-                </div>
-
-                <Separator>{t("separator.choose_own")}</Separator>
-
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="relative">
-                    <div
-                      className={cn(
-                        "group relative flex h-32 w-32 cursor-pointer items-center justify-center rounded-lg border-2 shadow-sm transition-all hover:scale-105 hover:shadow-md",
-                        isColorDark(foregroundColor)
-                          ? "border-slate-100"
-                          : "border-slate-800",
-                      )}
-                      style={{ backgroundColor: `#${foregroundColor}` }}
-                    >
-                      <input
-                        type="color"
-                        value={`#${foregroundColor}`}
-                        onChange={(e) => handleColorWheelChange(e, false)}
-                        className="absolute h-full w-full cursor-pointer opacity-0"
-                        aria-label={t("aria.fg_color")}
-                      />
-                      <Pipette
-                        className={cn(
-                          "h-8 w-8 transition-opacity group-hover:opacity-100",
-                          isColorDark(foregroundColor)
-                            ? "text-slate-50 opacity-80"
-                            : "text-slate-800 opacity-80",
-                        )}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2 dark:bg-slate-800">
-                    <Palette className="h-4 w-4 text-blue-500" />
-                    <div className="font-mono text-sm">
-                      #{foregroundColor} · {rgbToLibXenon(foregroundColor)}
-                    </div>
-                  </div>
-                </div>
+              <TabsContent value="foreground">
+                <ColorPicker
+                  color={foregroundColor}
+                  setColor={setForegroundColor}
+                  isBackground={false}
+                />
               </TabsContent>
 
               {/* ASCII Art Tab */}
