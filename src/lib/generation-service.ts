@@ -62,13 +62,17 @@ export const checkBuildStatus = async (
   const mmdd = date.slice(4, 8);
   const folderUrl = `${GITHUB_BASE_URL}/${year}/${mmdd}/${id}`;
 
-  const logResponse = await fetch(`${folderUrl}/log.txt`);
+  const logResponse = await fetch(`${folderUrl}/log.txt`, {
+    cache: "no-store",
+  });
 
   if (!logResponse.ok) {
     return { ready: false };
   }
 
-  const filenameResponse = await fetch(`${folderUrl}/original-filename.txt`);
+  const filenameResponse = await fetch(`${folderUrl}/original-filename.txt`, {
+    cache: "no-store",
+  });
 
   if (!filenameResponse.ok) {
     return { ready: true, failed: true, logUrl: `${folderUrl}/log.txt` };

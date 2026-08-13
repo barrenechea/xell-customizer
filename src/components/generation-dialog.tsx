@@ -130,7 +130,7 @@ export function GenerationDialog({
       return;
     }
 
-    if (pollCount >= 10) {
+    if (pollCount >= 20) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setError(t("generation.error.timeout"));
       setStatus("error");
@@ -180,7 +180,7 @@ export function GenerationDialog({
       case "starting":
         return 10;
       case "building":
-        return Math.min(20 + pollCount * 20, 90);
+        return Math.min(20 + (pollCount / 20) * 70, 90);
       case "ready":
         return 100;
       case "error":
