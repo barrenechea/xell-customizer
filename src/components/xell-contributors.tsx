@@ -25,9 +25,9 @@ const ContributorsScroller = () => {
   const [displayText, setDisplayText] = useState("");
 
   useEffect(() => {
-    let typingTimeout: NodeJS.Timeout;
-    let pauseTimeout: NodeJS.Timeout;
-    let eraseTimeout: NodeJS.Timeout;
+    let typingTimeout: ReturnType<typeof setTimeout>;
+    let pauseTimeout: ReturnType<typeof setTimeout>;
+    let eraseTimeout: ReturnType<typeof setTimeout>;
     let charIndex = 0;
 
     const typeText = () => {

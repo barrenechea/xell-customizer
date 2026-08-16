@@ -29,6 +29,8 @@ interface GenerationDialogProps {
 
 type GenerationStatus = "initial" | "starting" | "building" | "ready" | "error";
 
+const MAX_POLLS = 20;
+
 interface DownloadInfo {
   filename: string;
   downloadUrl: string;
@@ -130,7 +132,7 @@ export function GenerationDialog({
       return;
     }
 
-    if (pollCount >= 20) {
+    if (pollCount >= MAX_POLLS) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setError(t("generation.error.timeout"));
       setStatus("error");
@@ -180,7 +182,7 @@ export function GenerationDialog({
       case "starting":
         return 10;
       case "building":
-        return Math.min(20 + (pollCount / 20) * 70, 90);
+        return Math.min(20 + (pollCount / MAX_POLLS) * 70, 90);
       case "ready":
         return 100;
       case "error":
@@ -205,12 +207,12 @@ export function GenerationDialog({
             {getStatusMessage()}
           </AlertDialogDescription>
 
-          <div className="mt-4">
+          <div className="mt-4 w-full">
             <Progress value={getProgressValue()} className="h-2 w-full" />
           </div>
 
           {status === "error" && (
-            <div className="bg-destructive/10 text-destructive mt-4 rounded-md p-3 text-sm">
+            <div className="bg-destructive/10 text-destructive mt-4 w-full rounded-md p-3 text-sm">
               <span>{error}</span>
               {logUrl && (
                 <Button

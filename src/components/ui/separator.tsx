@@ -1,13 +1,9 @@
-import * as SeparatorPrimitive from "@radix-ui/react-separator";
+"use client";
+
+import { Separator as SeparatorPrimitive } from "radix-ui";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-
-interface SeparatorProps extends React.ComponentProps<
-  typeof SeparatorPrimitive.Root
-> {
-  children?: React.ReactNode;
-}
 
 function Separator({
   className,
@@ -15,15 +11,15 @@ function Separator({
   decorative = true,
   children,
   ...props
-}: SeparatorProps) {
+}: React.ComponentProps<typeof SeparatorPrimitive.Root>) {
   if (!children) {
     return (
       <SeparatorPrimitive.Root
-        data-slot="separator-root"
+        data-slot="separator"
         decorative={decorative}
         orientation={orientation}
         className={cn(
-          "bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
+          "bg-border shrink-0 data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
           className,
         )}
         {...props}
@@ -39,11 +35,11 @@ function Separator({
       )}
     >
       <SeparatorPrimitive.Root
-        data-slot="separator-root"
+        data-slot="separator"
         decorative={decorative}
         orientation={orientation}
         className={cn(
-          "bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
+          "bg-border shrink-0 data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
           orientation === "horizontal" ? "flex-1" : "h-full w-px flex-none",
           className,
         )}
@@ -58,11 +54,11 @@ function Separator({
         {children}
       </div>
       <SeparatorPrimitive.Root
-        data-slot="separator-root"
+        data-slot="separator"
         decorative={decorative}
         orientation={orientation}
         className={cn(
-          "bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
+          "bg-border shrink-0 data-horizontal:h-px data-horizontal:w-full data-vertical:w-px data-vertical:self-stretch",
           orientation === "horizontal" ? "flex-1" : "h-full w-px flex-none",
           className,
         )}
