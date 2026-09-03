@@ -97,7 +97,11 @@ export function GenerationDialog({
 
       const downloadUrl = result.downloadUrl!;
       const response = await fetch(downloadUrl);
-      if (!response.ok) throw new Error(t("generation.error.fetch_artifact"));
+      if (!response.ok) {
+        setError(t("generation.error.fetch_artifact"));
+        setStatus("error");
+        return;
+      }
       const blob = await response.blob();
 
       setDownloadInfo({ filename: result.filename!, downloadUrl });
@@ -208,7 +212,7 @@ export function GenerationDialog({
           </AlertDialogDescription>
 
           <div className="mt-4 w-full">
-            <Progress value={getProgressValue()} className="h-2 w-full" />
+            <Progress value={getProgressValue()} className="w-full" />
           </div>
 
           {status === "error" && (
@@ -246,8 +250,7 @@ export function GenerationDialog({
 
               {status === "error" && (
                 <AlertDialogAction
-                  onClick={(e) => {
-                    e.preventDefault();
+                  onClick={() => {
                     void startBuild();
                   }}
                 >

@@ -4,6 +4,7 @@ import { Trans, useTranslation } from "react-i18next";
 
 import { ColorPicker } from "@/components/color-picker";
 import { GenerationDialog } from "@/components/generation-dialog";
+import { LabeledSeparator } from "@/components/labeled-separator";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import ContributorsScroller from "@/components/xell-contributors";
@@ -221,7 +221,7 @@ const XeLLCustomizer = () => {
                   ))}
                 </div>
 
-                <Separator>{t("separator.create_own")}</Separator>
+                <LabeledSeparator>{t("separator.create_own")}</LabeledSeparator>
 
                 <Textarea
                   value={asciiArt}
@@ -247,7 +247,7 @@ const XeLLCustomizer = () => {
         {/* Footer */}
         <footer className="mt-12 text-center">
           <div className="flex flex-col space-y-2">
-            <Separator>
+            <LabeledSeparator>
               <span className="text-slate-500 dark:text-slate-400">
                 <Trans i18nKey="footer.created_by">
                   <a
@@ -260,7 +260,7 @@ const XeLLCustomizer = () => {
                   </a>
                 </Trans>
               </span>
-            </Separator>
+            </LabeledSeparator>
             <p className="text-xs text-slate-400 dark:text-slate-500">
               2025-{new Date().getFullYear()} · {t("footer.title")}
             </p>

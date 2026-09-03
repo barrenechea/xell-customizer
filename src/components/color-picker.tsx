@@ -2,8 +2,8 @@ import { Check, Palette, Pipette } from "lucide-react";
 import { type ChangeEvent } from "react";
 import { useTranslation } from "react-i18next";
 
+import { LabeledSeparator } from "@/components/labeled-separator";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import {
   CONSOLE_COLORS,
   type ConsoleColorName,
@@ -57,7 +57,7 @@ export function ColorPicker({
         ))}
       </div>
 
-      <Separator>{t("separator.choose_own")}</Separator>
+      <LabeledSeparator>{t("separator.choose_own")}</LabeledSeparator>
 
       <div className="flex flex-col items-center space-y-4">
         <div className="relative">
