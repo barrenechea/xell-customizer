@@ -25,6 +25,7 @@ import {
 } from "@/lib/theme-colors";
 
 const today = new Date().toISOString().split("T")[0];
+const currentYear = new Date().getFullYear();
 const gitData = "v0.993-git-7526b02";
 
 const outputHeader = `
@@ -262,7 +263,7 @@ const XeLLCustomizer = () => {
               </span>
             </LabeledSeparator>
             <p className="text-xs text-slate-400 dark:text-slate-500">
-              2025-{new Date().getFullYear()} · {t("footer.title")}
+              2025-{currentYear} · {t("footer.title")}
             </p>
           </div>
         </footer>

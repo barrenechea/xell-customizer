@@ -28,7 +28,7 @@ function LabeledSeparator({
       />
       <div
         className={cn(
-          "text-muted-foreground px-2 text-sm",
+          "px-2 text-sm text-muted-foreground",
           orientation === "vertical" && "px-0 py-2",
         )}
       >

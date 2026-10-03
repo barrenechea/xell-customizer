@@ -216,13 +216,13 @@ export function GenerationDialog({
           </div>
 
           {status === "error" && (
-            <div className="bg-destructive/10 text-destructive mt-4 w-full rounded-md p-3 text-sm">
+            <div className="mt-4 w-full rounded-md bg-destructive/10 p-3 text-sm text-destructive">
               <span>{error}</span>
               {logUrl && (
                 <Button
                   variant="link"
                   size="sm"
-                  className="text-destructive mt-1 h-auto p-0"
+                  className="mt-1 h-auto p-0 text-destructive"
                   onClick={() =>
                     window.open(logUrl, "_blank", "noopener,noreferrer")
                   }
