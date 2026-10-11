@@ -1,6 +1,9 @@
+import type { SelectorParam } from "i18next";
+
 interface ASCIIPreset {
   id: string;
   value: string;
+  labelKey: SelectorParam;
 }
 
 const xellReloadedASCII = `
@@ -60,14 +63,17 @@ export const asciiPresets: ASCIIPreset[] = [
   {
     id: "xell-reloaded",
     value: xellReloadedASCII,
+    labelKey: ($) => $.asciiPresets["xell-reloaded"].name,
   },
   {
     id: "free60",
     value: free60ASCII,
+    labelKey: ($) => $.asciiPresets.free60.name,
   },
   {
     id: "razor1911",
     value: razor1911ASCII,
+    labelKey: ($) => $.asciiPresets.razor1911.name,
   },
 ];
 

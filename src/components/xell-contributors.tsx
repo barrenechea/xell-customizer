@@ -74,7 +74,7 @@ const ContributorsScroller = () => {
     <div className="my-2 flex justify-center">
       <div className="flex w-full max-w-md">
         <div className="flex-1 pr-2 text-right font-medium">
-          {t("contributors.thanks")}
+          {t(($) => $.contributors.thanks)}
         </div>
         <div className="flex-1 text-left">
           <span className="text-blue-600 dark:text-blue-400">

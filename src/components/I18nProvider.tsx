@@ -12,7 +12,7 @@ export function I18nProvider({ children }: I18nProviderProps) {
   useEffect(() => {
     const updateHtmlAttrs = () => {
       document.documentElement.lang = i18n.language;
-      document.title = i18n.t("app.title");
+      document.title = i18n.t(($) => $.app.title);
     };
 
     updateHtmlAttrs();

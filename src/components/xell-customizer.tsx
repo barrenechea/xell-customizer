@@ -72,12 +72,12 @@ const XeLLCustomizer = () => {
       <a
         className="github-fork-ribbon hidden md:block"
         href="https://github.com/barrenechea/xell-customizer"
-        data-ribbon={t("github.ribbon")}
-        title={t("github.ribbon")}
+        data-ribbon={t(($) => $.github.ribbon)}
+        title={t(($) => $.github.ribbon)}
         target="_blank"
         rel="noopener noreferrer"
       >
-        {t("github.ribbon")}
+        {t(($) => $.github.ribbon)}
       </a>
       <div className="container mx-auto max-w-5xl px-4 py-8">
         {/* Header Section */}
@@ -86,10 +86,10 @@ const XeLLCustomizer = () => {
             <Terminal className="h-6 w-6 text-blue-600 dark:text-blue-400" />
           </div>
           <h1 className="mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-4xl font-bold text-transparent">
-            {t("app.title")}
+            {t(($) => $.app.title)}
           </h1>
           <p className="mx-auto max-w-xl text-slate-600 dark:text-slate-400">
-            {t("app.subtitle")}
+            {t(($) => $.app.subtitle)}
           </p>
 
           {/* Contributors scroller */}
@@ -101,9 +101,9 @@ const XeLLCustomizer = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Monitor className="h-5 w-5 text-purple-500" />
-              {t("preview.title")}
+              {t(($) => $.preview.title)}
             </CardTitle>
-            <CardDescription>{t("preview.description")}</CardDescription>
+            <CardDescription>{t(($) => $.preview.description)}</CardDescription>
           </CardHeader>
           <CardContent className="p-0">
             {/* Monitor Display */}
@@ -135,19 +135,27 @@ const XeLLCustomizer = () => {
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2">
               <Layout className="h-5 w-5 text-purple-500" />
-              {t("settings.title")}
+              {t(($) => $.settings.title)}
             </CardTitle>
-            <CardDescription>{t("settings.description")}</CardDescription>
+            <CardDescription>
+              {t(($) => $.settings.description)}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="presets" className="w-full">
               <TabsList className="mb-4 grid w-full grid-cols-4">
-                <TabsTrigger value="presets">{t("tabs.presets")}</TabsTrigger>
-                <TabsTrigger value="background">
-                  {t("tabs.background")}
+                <TabsTrigger value="presets">
+                  {t(($) => $.tabs.presets)}
                 </TabsTrigger>
-                <TabsTrigger value="foreground">{t("tabs.text")}</TabsTrigger>
-                <TabsTrigger value="ascii">{t("tabs.ascii")}</TabsTrigger>
+                <TabsTrigger value="background">
+                  {t(($) => $.tabs.background)}
+                </TabsTrigger>
+                <TabsTrigger value="foreground">
+                  {t(($) => $.tabs.text)}
+                </TabsTrigger>
+                <TabsTrigger value="ascii">
+                  {t(($) => $.tabs.ascii)}
+                </TabsTrigger>
               </TabsList>
 
               {/* Presets Tab */}
@@ -162,7 +170,7 @@ const XeLLCustomizer = () => {
                     >
                       <div className="flex w-full items-center justify-between">
                         <span className="font-semibold">
-                          {t(`themeColors.${preset.id}.name`)}
+                          {t(($) => $.themeColors[preset.id].name)}
                         </span>
                         <div className="flex items-center space-x-2">
                           <div
@@ -180,7 +188,7 @@ const XeLLCustomizer = () => {
                         </div>
                       </div>
                       <p className="mt-1 text-left text-xs text-wrap text-slate-500 dark:text-slate-400">
-                        {t(`themeColors.${preset.id}.description`)}
+                        {t(($) => $.themeColors[preset.id].description)}
                       </p>
                     </Button>
                   ))}
@@ -217,18 +225,20 @@ const XeLLCustomizer = () => {
                       disabled={asciiArt === preset.value}
                     >
                       <Brush className="h-4 w-4 text-blue-500" />
-                      {t(`asciiPresets.${preset.id}.name`)}
+                      {t(preset.labelKey)}
                     </Button>
                   ))}
                 </div>
 
-                <LabeledSeparator>{t("separator.create_own")}</LabeledSeparator>
+                <LabeledSeparator>
+                  {t(($) => $.separator.create_own)}
+                </LabeledSeparator>
 
                 <Textarea
                   value={asciiArt}
                   onChange={(e) => setAsciiArt(e.target.value)}
                   className="min-h-[200px] resize-none overflow-x-auto font-mono text-xs leading-none whitespace-pre"
-                  placeholder={t("ascii.placeholder")}
+                  placeholder={t(($) => $.ascii.placeholder)}
                 />
               </TabsContent>
             </Tabs>
@@ -239,7 +249,7 @@ const XeLLCustomizer = () => {
                 size="lg"
               >
                 <Download className="h-4 w-4" />
-                {t("generate.button")}
+                {t(($) => $.generate.button)}
               </Button>
             </div>
           </CardContent>
@@ -250,7 +260,7 @@ const XeLLCustomizer = () => {
           <div className="flex flex-col space-y-2">
             <LabeledSeparator>
               <span className="text-slate-500 dark:text-slate-400">
-                <Trans i18nKey="footer.created_by">
+                <Trans i18nKey={($) => $.footer.created_by}>
                   <a
                     href="https://www.barrenechea.cl"
                     className="text-blue-600 underline-offset-2 hover:underline dark:text-blue-400"
@@ -263,7 +273,7 @@ const XeLLCustomizer = () => {
               </span>
             </LabeledSeparator>
             <p className="text-xs text-slate-400 dark:text-slate-500">
-              2025-{currentYear} · {t("footer.title")}
+              2025-{currentYear} · {t(($) => $.footer.title)}
             </p>
           </div>
         </footer>

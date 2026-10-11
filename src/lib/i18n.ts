@@ -45,4 +45,14 @@ void i18n
     },
   });
 
+declare module "i18next" {
+  interface CustomTypeOptions {
+    defaultNS: "translation";
+    enableSelector: true;
+    resources: {
+      translation: typeof enTranslations;
+    };
+  }
+}
+
 export default i18n;

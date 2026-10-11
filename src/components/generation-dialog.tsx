@@ -74,7 +74,9 @@ export function GenerationDialog({
     } catch (err) {
       console.error("Failed to start build:", err);
       setError(
-        err instanceof Error ? err.message : t("generation.error.start_failed"),
+        err instanceof Error
+          ? err.message
+          : t(($) => $.generation.error.start_failed),
       );
       setStatus("error");
     }
@@ -89,7 +91,7 @@ export function GenerationDialog({
       if (!result.ready) return;
 
       if (result.failed) {
-        setError(t("generation.error.build_failed"));
+        setError(t(($) => $.generation.error.build_failed));
         setLogUrl(result.logUrl ?? null);
         setStatus("error");
         return;
@@ -98,7 +100,7 @@ export function GenerationDialog({
       const downloadUrl = result.downloadUrl!;
       const response = await fetch(downloadUrl);
       if (!response.ok) {
-        setError(t("generation.error.fetch_artifact"));
+        setError(t(($) => $.generation.error.fetch_artifact));
         setStatus("error");
         return;
       }
@@ -110,7 +112,9 @@ export function GenerationDialog({
     } catch (err) {
       console.error("Failed to check build status:", err);
       setError(
-        err instanceof Error ? err.message : t("generation.error.status_check"),
+        err instanceof Error
+          ? err.message
+          : t(($) => $.generation.error.status_check),
       );
       setStatus("error");
     }
@@ -138,7 +142,7 @@ export function GenerationDialog({
 
     if (pollCount >= MAX_POLLS) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setError(t("generation.error.timeout"));
+      setError(t(($) => $.generation.error.timeout));
       setStatus("error");
       return;
     }
@@ -167,15 +171,15 @@ export function GenerationDialog({
   const getStatusMessage = () => {
     switch (status) {
       case "initial":
-        return t("generation.status.initial");
+        return t(($) => $.generation.status.initial);
       case "starting":
-        return t("generation.status.starting");
+        return t(($) => $.generation.status.starting);
       case "building":
-        return t("generation.status.building");
+        return t(($) => $.generation.status.building);
       case "ready":
-        return t("generation.status.ready");
+        return t(($) => $.generation.status.ready);
       case "error":
-        return error ?? t("generation.status.error");
+        return error ?? t(($) => $.generation.status.error);
     }
   };
 
@@ -204,8 +208,8 @@ export function GenerationDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>
             {status === "ready"
-              ? t("generation.title.ready")
-              : t("generation.title.generating")}
+              ? t(($) => $.generation.title.ready)
+              : t(($) => $.generation.title.generating)}
           </AlertDialogTitle>
           <AlertDialogDescription className="py-2">
             {getStatusMessage()}
@@ -227,7 +231,7 @@ export function GenerationDialog({
                     window.open(logUrl, "_blank", "noopener,noreferrer")
                   }
                 >
-                  {t("generation.button.check_log")}
+                  {t(($) => $.generation.button.check_log)}
                 </Button>
               )}
             </div>
@@ -238,13 +242,13 @@ export function GenerationDialog({
           {status === "ready" ? (
             <AlertDialogAction onClick={downloadFile}>
               <Download className="mr-2 h-4 w-4" />
-              {t("generation.button.download")}
+              {t(($) => $.generation.button.download)}
             </AlertDialogAction>
           ) : (
             <>
               {!isLoading && (
                 <AlertDialogCancel>
-                  {t("generation.button.cancel")}
+                  {t(($) => $.generation.button.cancel)}
                 </AlertDialogCancel>
               )}
 
@@ -254,14 +258,14 @@ export function GenerationDialog({
                     void startBuild();
                   }}
                 >
-                  {t("generation.button.try_again")}
+                  {t(($) => $.generation.button.try_again)}
                 </AlertDialogAction>
               )}
 
               {isLoading && (
                 <Button disabled variant="outline" className="gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  {t("generation.button.building")}
+                  {t(($) => $.generation.button.building)}
                 </Button>
               )}
             </>

@@ -50,14 +50,30 @@ export function ColorPicker({
             onClick={() => handlePresetColor(name as ConsoleColorName)}
           >
             <span className="truncate text-xs uppercase">
-              {t(`colors.${name.replace("CONSOLE_COLOR_", "").toLowerCase()}`)}
+              {t(
+                ($) =>
+                  $.colors[
+                    name.replace("CONSOLE_COLOR_", "").toLowerCase() as
+                      | "red"
+                      | "blue"
+                      | "green"
+                      | "black"
+                      | "white"
+                      | "grey"
+                      | "brown"
+                      | "purple"
+                      | "yellow"
+                      | "orange"
+                      | "pink"
+                  ],
+              )}
             </span>
             {color === value && <Check className="ml-1 h-4 w-4" />}
           </Button>
         ))}
       </div>
 
-      <LabeledSeparator>{t("separator.choose_own")}</LabeledSeparator>
+      <LabeledSeparator>{t(($) => $.separator.choose_own)}</LabeledSeparator>
 
       <div className="flex flex-col items-center space-y-4">
         <div className="relative">
@@ -73,7 +89,9 @@ export function ColorPicker({
               value={`#${color}`}
               onChange={handleColorWheelChange}
               className="absolute h-full w-full cursor-pointer opacity-0"
-              aria-label={t(isBackground ? "aria.bg_color" : "aria.fg_color")}
+              aria-label={t(($) =>
+                isBackground ? $.aria.bg_color : $.aria.fg_color,
+              )}
             />
             <Pipette
               className={cn(
